@@ -18,7 +18,9 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import vn.hoanguyen.stargithubsearch.R
 import vn.hoanguyen.stargithubsearch.databinding.FragmentSearchUserBinding
+import vn.hoanguyen.stargithubsearch.extension.hideKeyboard
 import vn.hoanguyen.stargithubsearch.viewmodel.ViewModelGithub
 
 /**
@@ -90,13 +92,14 @@ class FragmentSearchUser : Fragment() {
 
     private fun setupList() {
         mainListAdapter = AdapterUser() { item, pos ->
-            Toast.makeText(requireContext(), item.userName, Toast.LENGTH_SHORT).show()
-            item.id.let { id ->
-//                ActivityResidentServiceComplaintDetails.instance(requireContext(), id, pos)
-//                    .also { intent ->
-//                        startActivityForResult(intent, 100)
-//                    }
-            }
+            hideKeyboard()
+            parentFragmentManager.beginTransaction()
+                .replace(
+                    R.id.rootLayout,
+                    FragmentUserDetails.newInstance(item.userName)
+                )
+                .addToBackStack("FragmentUserDetails")
+                .commit()
         }
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(context)
