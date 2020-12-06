@@ -49,6 +49,24 @@ class FragmentSearchUser : Fragment() {
         setupView()
     }
 
+//    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+//        super.onViewStateRestored(savedInstanceState)
+//        val currentSearch = savedInstanceState?.getString("Query", "").orEmpty()
+//
+//        if (currentSearch.isEmpty().not()) {
+//            binding.editQuery.setText(currentSearch)
+//        }
+//    }
+//
+//    override fun onSaveInstanceState(outState: Bundle) {
+//        val currentSearch = binding.editQuery.text.toString()
+//        if (currentSearch.isEmpty().not()) {
+//            outState.putString("Query", currentSearch)
+//        }
+//
+//        super.onSaveInstanceState(outState)
+//    }
+
     private fun setupView() {
         lifecycleScope.launch {
             @OptIn(ExperimentalCoroutinesApi::class)

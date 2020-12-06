@@ -9,12 +9,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        showFragment()
+        //Only add fragment for init 1st time. Rotate will reuse/restore fragment by activity
+        if (savedInstanceState == null)
+            showFragment()
     }
 
     private fun showFragment() {
         supportFragmentManager.beginTransaction()
-            .add(
+            .replace(
                 R.id.rootLayout,
                 FragmentSearchUser.newInstance(),
                 "FragmentSearchUser"
