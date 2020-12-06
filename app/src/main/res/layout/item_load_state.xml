@@ -10,6 +10,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
+        android:layout_marginEnd="8dp"
+        android:layout_toStartOf="@+id/load_state_retry"
         android:text="Error"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:textColor="@color/design_default_color_error" />

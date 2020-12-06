@@ -1,21 +1,29 @@
 package vn.hoanguyen.stargithubsearch.service
 
 import androidx.paging.PagingSource
+import org.json.JSONObject
+import retrofit2.HttpException
 import vn.hoanguyen.stargithubsearch.model.User
-import java.io.IOException
 
 /**
  * Created by Hoa Nguyen on Dec 06 2020.
  */
 
-class PagingSourceSearch(private val api: GithubSearchService, private val searchInput: String = "") :
+class PagingSourceSearch(
+    private val api: GithubSearchService,
+    private val searchInput: String = ""
+) :
     PagingSource<Int, User>() {
 
-    companion object{
+    companion object {
         const val PAGE_SIZE = 50
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, User> {
+
+        if (searchInput.isEmpty()) {
+            return LoadResult.Page(data = emptyList(), prevKey = null, nextKey = null)
+        }
 
         return try {
             val nextPage = params.key ?: 1
@@ -31,7 +39,14 @@ class PagingSourceSearch(private val api: GithubSearchService, private val searc
                     else null
                 )
             } else {
-                LoadResult.Error(IOException())
+                if (response.code() == 403) {
+                    val jObjError = JSONObject(response.errorBody()?.string().orEmpty())
+                    LoadResult.Error(
+                        GithubException(mess = jObjError.getString("message"))
+                    )
+                } else {
+                    LoadResult.Error(HttpException(response))
+                }
             }
         } catch (e: Exception) {
             LoadResult.Error(e)
